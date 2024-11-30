@@ -1,0 +1,6 @@
+# Exclude .env files
+.env
+*.env
+
+# Ignore directories that may contain environment files
+.env/
