@@ -43,6 +43,14 @@ var (
 			tgbotapi.NewInlineKeyboardButtonURL(tutorialButton, "https://core.telegram.org/bots/api"),
 		),
 	)
+
+	startMenuMarkup = tgbotapi.NewInlineKeyboardMarkup(
+		tgbotapi.NewInlineKeyboardRow(
+			tgbotapi.NewInlineKeyboardButtonData(pkg.ChatGPT, pkg.ChatGPT),
+			tgbotapi.NewInlineKeyboardButtonData(pkg.Claude, pkg.Claude),
+			tgbotapi.NewInlineKeyboardButtonData(pkg.Gemini, pkg.Gemini),
+		),
+	)
 )
 
 func main() {
@@ -114,8 +122,6 @@ func handleMessage(message *tgbotapi.Message) {
 	user := message.From
 	text := message.Text
 
-	// log.Printf("lat: %f", message.Chat.Location.Location.Latitude)
-	// log.Printf("long: %f", message.Chat.Location.Location.Longitude)
 	log.Printf("id: %d", user.ID)
 	log.Printf("username: %s", user.UserName)
 	log.Printf("lang code: %s", user.LanguageCode)
@@ -154,17 +160,15 @@ func handleCommand(chatId int64, command, firstName string) error {
 	switch command {
 	case "/start":
 		err = hello(chatId, firstName)
+
 	case "/scream":
 		screaming = true
-		break
 
 	case "/whisper":
 		screaming = false
-		break
 
 	case "/menu":
 		err = sendMenu(chatId)
-		break
 	}
 
 	return err
@@ -205,13 +209,6 @@ func hello(chatId int64, firstName string) error {
 	txt := fmt.Sprintf("سلام %s کون طلا! امروز چی میخوای؟", firstName)
 	msg := tgbotapi.NewMessage(chatId, txt)
 	msg.ParseMode = tgbotapi.ModeHTML
-	startMenuMarkup := tgbotapi.NewInlineKeyboardMarkup(
-		tgbotapi.NewInlineKeyboardRow(
-			tgbotapi.NewInlineKeyboardButtonData(pkg.ChatGPT, pkg.ChatGPT),
-			tgbotapi.NewInlineKeyboardButtonData(pkg.Claude, pkg.Claude),
-			tgbotapi.NewInlineKeyboardButtonData(pkg.Gemini, pkg.Gemini),
-		),
-	)
 	msg.ReplyMarkup = startMenuMarkup
 	_, err := bot.Send(msg)
 	return err

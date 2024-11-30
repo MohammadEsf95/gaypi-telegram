@@ -1,6 +1,6 @@
 package pkg
 
-var (
+const (
 	ChatGPT = "ChatGPT"
 	Claude  = "Claude"
 	Gemini  = "Gemini"
