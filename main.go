@@ -51,6 +51,22 @@ var (
 			tgbotapi.NewInlineKeyboardButtonData(pkg.Gemini, pkg.Gemini),
 		),
 	)
+
+	gptPriceMenuMarkup = tgbotapi.NewInlineKeyboardMarkup(
+		tgbotapi.NewInlineKeyboardRow(
+			tgbotapi.NewInlineKeyboardButtonData(pkg.Back, pkg.Back),
+		),
+		tgbotapi.NewInlineKeyboardRow(
+			tgbotapi.NewInlineKeyboardButtonData("50", "50"),
+			tgbotapi.NewInlineKeyboardButtonData("100", "100"),
+			tgbotapi.NewInlineKeyboardButtonData("150", "150"),
+		),
+		tgbotapi.NewInlineKeyboardRow(
+			tgbotapi.NewInlineKeyboardButtonData("200", "200"),
+			tgbotapi.NewInlineKeyboardButtonData("250", "250"),
+			tgbotapi.NewInlineKeyboardButtonData("300", "300"),
+		),
+	)
 )
 
 func main() {
@@ -184,8 +200,11 @@ func handleButton(query *tgbotapi.CallbackQuery) {
 		text = secondMenu
 		markup = secondMenuMarkup
 	} else if query.Data == backButton {
-		text = firstMenu
-		markup = firstMenuMarkup
+		text = fmt.Sprintf("سلام %s کون طلا! امروز چی میخوای؟", query.From.FirstName)
+		markup = startMenuMarkup
+	} else if query.Data == pkg.ChatGPT {
+		text = pkg.ChatGPTPriceDescription
+		markup = gptPriceMenuMarkup
 	}
 
 	callbackCfg := tgbotapi.NewCallback(query.ID, "")
